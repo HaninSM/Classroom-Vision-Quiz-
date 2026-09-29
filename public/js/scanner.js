@@ -27,6 +27,19 @@ const camera_placeholder = document.getElementById('camera_placeholder');
 const detection_engine_badge = document.getElementById('detection_engine_badge');
 const fps_counter = document.getElementById('fps_counter');
 
+// Elemen Tab & Kontrol IP Webcam (HP Android)
+const tab_webcam_mode = document.getElementById('tab_webcam_mode');
+const tab_ip_mode = document.getElementById('tab_ip_mode');
+const controls_webcam_box = document.getElementById('controls_webcam_box');
+const controls_ip_box = document.getElementById('controls_ip_box');
+const ip_webcam_url_input = document.getElementById('ip_webcam_url_input');
+const ip_stream_mode_select = document.getElementById('ip_stream_mode_select');
+const btn_connect_ip_camera = document.getElementById('btn_connect_ip_camera');
+const ip_connection_status = document.getElementById('ip_connection_status');
+let is_ip_camera_active = false;
+let ip_stream_img_element = null;
+let ip_polling_timer_id = null;
+
 // Elemen DOM Soal & Hasil
 const active_question_num_badge = document.getElementById('active_question_num_badge');
 const active_question_text_preview = document.getElementById('active_question_text_preview');
@@ -688,6 +701,267 @@ btn_scanner_prev_q.addEventListener('click', () => {
     }
 });
 
+// Event Tab Mode Switcher
+if (tab_webcam_mode && tab_ip_mode) {
+    tab_webcam_mode.addEventListener('click', () => {
+        tab_webcam_mode.className = 'px-4 py-2 rounded-xl bg-indigo-600 text-white shadow-sm transition flex items-center gap-1.5';
+        tab_ip_mode.className = 'px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition flex items-center gap-1.5';
+        controls_webcam_box.classList.remove('hidden');
+        controls_ip_box.classList.add('hidden');
+        if (is_ip_camera_active) stop_ip_webcam();
+    });
+
+    tab_ip_mode.addEventListener('click', () => {
+        tab_ip_mode.className = 'px-4 py-2 rounded-xl bg-indigo-600 text-white shadow-sm transition flex items-center gap-1.5';
+        tab_webcam_mode.className = 'px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition flex items-center gap-1.5';
+        controls_ip_box.classList.remove('hidden');
+        controls_webcam_box.classList.add('hidden');
+        if (is_scanning) stop_webcam_stream();
+    });
+}
+
+/**
+ * Menghubungkan atau memutus koneksi streaming kamera dari HP (IP Webcam).
+ */
+async function toggle_ip_webcam_connection() {
+    if (is_ip_camera_active) {
+        stop_ip_webcam();
+    } else {
+        await start_ip_webcam();
+    }
+}
+
+/**
+ * Memulai streaming pemindaian dari IP Webcam HP Android.
+ */
+async function start_ip_webcam() {
+    let raw_url = ip_webcam_url_input.value.trim();
+    if (!raw_url) {
+        alert('Silakan masukkan alamat URL IP Webcam (contoh: http://192.168.1.15:8080)');
+        ip_webcam_url_input.focus();
+        return;
+    }
+
+    // Normalisasi URL
+    if (!raw_url.startsWith('http://') && !raw_url.startsWith('https://')) {
+        raw_url = 'http://' + raw_url;
+    }
+    raw_url = raw_url.replace(/\/+$/, ''); // Hapus trailing slash
+    localStorage.setItem('cvq_ip_webcam_url', raw_url);
+
+    const stream_mode = ip_stream_mode_select.value; // 'proxy_shot' atau 'direct_mjpeg'
+    is_ip_camera_active = true;
+
+    btn_connect_ip_camera.textContent = 'Putuskan HP';
+    btn_connect_ip_camera.className = 'px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl shadow-md transition';
+    ip_connection_status.textContent = 'Menghubungkan ke ' + raw_url + '...';
+    ip_connection_status.className = 'font-bold text-amber-400';
+    camera_placeholder.classList.add('hidden');
+
+    if (stream_mode === 'proxy_shot') {
+        // Mode 1: Polling snapshot via proxy backend anti-CORS (paling stabil & kompatibel)
+        run_ip_camera_polling_loop(raw_url);
+    } else {
+        // Mode 2: Direct MJPEG stream
+        run_direct_mjpeg_stream(raw_url);
+    }
+}
+
+/**
+ * Menghentikan koneksi streaming IP Webcam HP.
+ */
+function stop_ip_webcam() {
+    is_ip_camera_active = false;
+    if (ip_polling_timer_id) {
+        clearTimeout(ip_polling_timer_id);
+        ip_polling_timer_id = null;
+    }
+    if (ip_stream_img_element) {
+        ip_stream_img_element.onload = null;
+        ip_stream_img_element.onerror = null;
+        ip_stream_img_element.src = '';
+        ip_stream_img_element = null;
+    }
+
+    btn_connect_ip_camera.textContent = 'Hubungkan HP';
+    btn_connect_ip_camera.className = 'px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-md transition';
+    ip_connection_status.textContent = 'Koneksi Terputus';
+    ip_connection_status.className = 'font-bold text-slate-500';
+    camera_placeholder.classList.remove('hidden');
+
+    ar_ctx.clearRect(0, 0, ar_overlay_canvas.width, ar_overlay_canvas.height);
+}
+
+/**
+ * Loop pengambilan frame berkecepatan tinggi via endpoint proxy anti-CORS backend.
+ * @param {string} base_url 
+ */
+async function run_ip_camera_polling_loop(base_url) {
+    if (!is_ip_camera_active) return;
+
+    const shot_target = `${base_url}/shot.jpg`;
+    const proxy_url = `/api/exam/proxy-shot?url=${encodeURIComponent(shot_target)}&_t=${Date.now()}`;
+
+    try {
+        const response = await fetch(proxy_url);
+        if (!response.ok) {
+            throw new Error(`Gagal fetch frame (Status ${response.status})`);
+        }
+
+        const blob = await response.blob();
+        const img = new Image();
+
+        await new Promise((resolve, reject) => {
+            img.onload = () => resolve();
+            img.onerror = (e) => reject(e);
+            img.src = URL.createObjectURL(blob);
+        });
+
+        // Update status terkoneksi hijau
+        ip_connection_status.textContent = 'Terhubung (Anti-CORS Stream Aktif)';
+        ip_connection_status.className = 'font-bold text-emerald-400';
+
+        // Sesuaikan ukuran kanvas AR dengan resolusi frame kamera HP
+        if (ar_overlay_canvas.width !== img.naturalWidth || ar_overlay_canvas.height !== img.naturalHeight) {
+            ar_overlay_canvas.width = img.naturalWidth;
+            ar_overlay_canvas.height = img.naturalHeight;
+        }
+
+        // Gambar frame kamera HP ke kanvas
+        ar_ctx.drawImage(img, 0, 0, ar_overlay_canvas.width, ar_overlay_canvas.height);
+        URL.revokeObjectURL(img.src);
+
+        // Eksekusi Computer Vision QR 4 Sisi pada frame ini
+        await execute_frame_vision_detection(ar_overlay_canvas);
+
+    } catch (err) {
+        ip_connection_status.textContent = 'Koneksi Gagal: ' + err.message;
+        ip_connection_status.className = 'font-bold text-rose-400';
+    }
+
+    if (is_ip_camera_active) {
+        // Interval refresh frame ~50ms (~15-20 FPS real-time)
+        ip_polling_timer_id = setTimeout(() => run_ip_camera_polling_loop(base_url), 50);
+    }
+}
+
+/**
+ * Menjalankan streaming langsung MJPEG via tag Image.
+ * @param {string} base_url 
+ */
+function run_direct_mjpeg_stream(base_url) {
+    ip_stream_img_element = new Image();
+    ip_stream_img_element.crossOrigin = 'anonymous';
+
+    ip_stream_img_element.onload = () => {
+        ip_connection_status.textContent = 'Terhubung (Direct MJPEG Stream)';
+        ip_connection_status.className = 'font-bold text-emerald-400';
+        requestAnimationFrame(direct_mjpeg_render_loop);
+    };
+
+    ip_stream_img_element.onerror = () => {
+        ip_connection_status.textContent = 'CORS Terhalang. Disarankan pilih mode "Anti-CORS Proxy".';
+        ip_connection_status.className = 'font-bold text-rose-400';
+    };
+
+    ip_stream_img_element.src = `${base_url}/video`;
+}
+
+/**
+ * Loop render untuk direct MJPEG stream.
+ */
+async function direct_mjpeg_render_loop() {
+    if (!is_ip_camera_active || !ip_stream_img_element) return;
+
+    if (ip_stream_img_element.naturalWidth) {
+        if (ar_overlay_canvas.width !== ip_stream_img_element.naturalWidth || ar_overlay_canvas.height !== ip_stream_img_element.naturalHeight) {
+            ar_overlay_canvas.width = ip_stream_img_element.naturalWidth;
+            ar_overlay_canvas.height = ip_stream_img_element.naturalHeight;
+        }
+        ar_ctx.drawImage(ip_stream_img_element, 0, 0, ar_overlay_canvas.width, ar_overlay_canvas.height);
+        await execute_frame_vision_detection(ar_overlay_canvas);
+    }
+
+    if (is_ip_camera_active) {
+        requestAnimationFrame(direct_mjpeg_render_loop);
+    }
+}
+
+/**
+ * Menjalankan deteksi barcode dan kalkulasi orientasi 4 sisi pada canvas target.
+ * @param {HTMLCanvasElement} canvas_element 
+ */
+async function execute_frame_vision_detection(canvas_element) {
+    const detected_items = [];
+
+    if (barcode_detector_engine) {
+        try {
+            const barcodes = await barcode_detector_engine.detect(canvas_element);
+            barcodes.forEach((barcode) => {
+                if (barcode.rawValue && barcode.cornerPoints && barcode.cornerPoints.length >= 4) {
+                    const detected_option = calculate_qr_orientation_option(barcode.cornerPoints);
+                    detected_items.push({
+                        raw_value: barcode.rawValue,
+                        corners: barcode.cornerPoints,
+                        option: detected_option
+                    });
+                }
+            });
+        } catch (e) {
+            // Abaikan error transien antar frame
+        }
+    } else if (typeof jsQR !== 'undefined') {
+        const off_ctx = canvas_element.getContext('2d');
+        const img_data = off_ctx.getImageData(0, 0, canvas_element.width, canvas_element.height);
+        const code = jsQR(img_data.data, img_data.width, img_data.height);
+        if (code && code.data && code.location) {
+            const corners = [
+                code.location.topLeftCorner,
+                code.location.topRightCorner,
+                code.location.bottomRightCorner,
+                code.location.bottomLeftCorner
+            ];
+            const detected_option = calculate_qr_orientation_option(corners);
+            detected_items.push({
+                raw_value: code.data,
+                corners: corners,
+                option: detected_option
+            });
+        }
+    }
+
+    let has_new_answers = false;
+
+    detected_items.forEach((item) => {
+        const matched_student = students_data.find(s => s.qr_token === item.raw_value);
+        const student_name = matched_student ? matched_student.student_name : 'Siswa';
+
+        draw_ar_student_badge(ar_ctx, item.corners, student_name, item.option);
+
+        if (matched_student) {
+            const previous_entry = detected_answers_map.get(item.raw_value);
+            if (!previous_entry || previous_entry.option !== item.option) {
+                detected_answers_map.set(item.raw_value, {
+                    qr_token: item.raw_value,
+                    detected_option: item.option,
+                    student_name: student_name,
+                    timestamp: Date.now()
+                });
+                has_new_answers = true;
+            }
+        }
+    });
+
+    if (has_new_answers || (Date.now() - last_sync_timestamp > 800 && detected_answers_map.size > 0)) {
+        sync_detected_answers_to_server();
+        update_live_ui_analytics();
+    }
+}
+
+if (btn_connect_ip_camera) {
+    btn_connect_ip_camera.addEventListener('click', toggle_ip_webcam_connection);
+}
+
 // Event Listener Pengujian via Unggah File Gambar
 const btn_upload_file_trigger = document.getElementById('btn_upload_file_trigger');
 const image_file_input = document.getElementById('image_file_input');
@@ -716,6 +990,11 @@ if (btn_upload_file_trigger && image_file_input) {
 
 // Inisialisasi awal saat halaman dimuat
 document.addEventListener('DOMContentLoaded', async () => {
+    const saved_ip = localStorage.getItem('cvq_ip_webcam_url');
+    if (saved_ip && ip_webcam_url_input) {
+        ip_webcam_url_input.value = saved_ip;
+    }
+
     await initialize_vision_engine();
     await enumerate_camera_devices();
     await fetch_quiz_questions();

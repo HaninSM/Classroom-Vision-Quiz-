@@ -510,11 +510,11 @@
             </section>
 
             <!-- SECTION 7: MODUL 4 - PEMINDAI KAMERA LIVE COMPUTER VISION -->
-            <section id="section-form5" class="space-y-4">
+            <section id="section-form5" class="space-y-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Modul 4 (Inti Sistem)</span>
-                        <h3 class="text-xl font-black text-slate-900">Pemindai Kamera Live Computer Vision (AR)</h3>
+                        <h3 class="text-xl font-black text-slate-900">Pemindai Kamera Live Computer Vision (AR) & Dual-Mode IP Webcam</h3>
                     </div>
                     <a href="/scanner.html" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg border border-amber-200 hover:bg-amber-100 transition">
                         Buka Pemindai Live &rarr;
@@ -525,14 +525,65 @@
                     Kamera guru menyorot seluruh siswa di kelas. Sistem mendeteksi titik sudut QR Code secara paralel, menghitung sudut putar kertas, dan menampilkan overlay <strong>Augmented Reality (AR)</strong> langsung di atas gambar setiap siswa yang mengangkat kartu.
                 </p>
 
-                <!-- Visual Mockup Pemindai Kamera -->
+                <!-- Dual Camera Mode Feature Showcase -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                        <div class="flex items-center gap-2 font-bold text-slate-800">
+                            <span class="text-lg">📹</span>
+                            <span>Mode 1: Webcam Laptop / USB</span>
+                        </div>
+                        <p class="text-slate-600 leading-relaxed text-[11px]">
+                            Menggunakan API peramban standar <code>navigator.mediaDevices.getUserMedia</code>. Ideal untuk penggunaan di meja guru saat siswa duduk dekat dengan laptop.
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-amber-50/60 border border-amber-200 rounded-2xl space-y-2">
+                        <div class="flex items-center gap-2 font-bold text-amber-900">
+                            <span class="text-lg">📱</span>
+                            <span>Mode 2: IP Webcam HP Android (Nirkabel)</span>
+                        </div>
+                        <p class="text-amber-800 leading-relaxed text-[11px]">
+                            Mengubah kamera smartphone Android menjadi kamera nirkabel beresolusi tinggi. Dilengkapi <strong>Anti-CORS Relay Proxy</strong> bawaan untuk melewati batasan keamanan browser tanpa lag.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step by step IP Webcam Android Guide -->
+                <div class="p-5 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border-l-4 border-amber-500 rounded-2xl space-y-3 text-xs">
+                    <h4 class="font-black text-slate-900 flex items-center gap-2">
+                        <span>🚀</span>
+                        <span>Panduan Penggunaan IP Webcam HP Android (Rekomendasi untuk Kelas Luas):</span>
+                    </h4>
+                    <ol class="list-decimal list-inside space-y-2 text-slate-700 leading-relaxed font-medium">
+                        <li><strong>Pasang Aplikasi:</strong> Unduh aplikasi gratis <strong>"IP Webcam"</strong> (oleh Pavel Khlebovich) dari Google Play Store pada smartphone Android guru.</li>
+                        <li><strong>Koneksi Wi-Fi:</strong> Pastikan HP dan Laptop terhubung ke jaringan Wi-Fi yang sama (atau aktifkan Hotspot Pribadi di HP lalu hubungkan Laptop).</li>
+                        <li><strong>Mulai Server di HP:</strong> Buka aplikasi IP Webcam di HP, gulir ke paling bawah, lalu klik <span class="font-bold text-slate-900">"Start server"</span>. Catat alamat IP yang muncul di layar HP (contoh: <code>http://192.168.1.15:8080</code>).</li>
+                        <li><strong>Buka Pemindai CVQ:</strong> Buka <a href="/scanner.html" target="_blank" class="text-amber-700 underline font-bold">scanner.html</a>, pilih tab <span class="font-bold text-slate-900">"📱 IP Webcam HP"</span>, dan masukkan alamat IP tersebut ke kolom yang tersedia.</li>
+                        <li><strong>Mulai Pindai:</strong> Klik tombol <span class="font-bold text-amber-700">"Hubungkan HP"</span>. Video kamera smartphone berdefinisi tinggi langsung aktif mendeteksi kartu murid di kelas.</li>
+                    </ol>
+                </div>
+
+                <!-- Visual Mockup Pemindai Kamera with Dual Mode -->
                 <div class="browser-mockup bg-slate-950 text-white">
                     <div class="browser-header bg-slate-900 border-slate-800 text-white">
                         <span class="dot bg-rose-500"></span>
                         <span class="dot bg-amber-500"></span>
                         <span class="dot bg-emerald-500"></span>
-                        <span class="text-[11px] font-mono text-slate-400 ml-2">http://localhost:3000/scanner.html (AR Live Scanner)</span>
+                        <span class="text-[11px] font-mono text-slate-400 ml-2">http://localhost:3000/scanner.html (AR Live Scanner & Dual Mode)</span>
                     </div>
+
+                    <!-- Inner Mockup Tab Switcher -->
+                    <div class="bg-slate-900 px-6 pt-4 pb-2 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 font-semibold cursor-pointer">📹 Webcam Laptop</span>
+                            <span class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold shadow-sm">📱 IP Webcam HP (Aktif)</span>
+                        </div>
+                        <div class="flex items-center gap-2 font-mono text-[11px] text-slate-300 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">
+                            <span class="text-emerald-400">&bull; Terhubung:</span>
+                            <span>http://192.168.1.15:8080</span>
+                        </div>
+                    </div>
+
                     <div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
                         <!-- Camera Viewport with AR badges -->
                         <div class="md:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl relative aspect-video flex items-center justify-center overflow-hidden p-4">
@@ -550,7 +601,7 @@
                                 </span>
                                 <span class="text-2xl mt-1">⬛</span>
                             </div>
-                            <span class="text-xs text-slate-500 font-mono">[ Video Kamera Live + AR Canvas Overlay ]</span>
+                            <span class="text-xs text-slate-500 font-mono">[ Video Kamera Live IP HP + AR Canvas Overlay ]</span>
                         </div>
                         <!-- Live Stats Side Panel -->
                         <div class="md:col-span-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-4 text-xs">
@@ -707,6 +758,12 @@
                                 <td class="p-3 font-mono font-bold">/api/exam/live-stats</td>
                                 <td class="p-3">Modul 4</td>
                                 <td class="p-3 text-slate-500">Mengambil statistik distribusi live pilihan suara</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/exam/proxy-shot</td>
+                                <td class="p-3">Modul 4</td>
+                                <td class="p-3 text-slate-500">Anti-CORS Relay Proxy untuk mengambil frame MJPEG/JPEG dari IP Webcam HP Nirkabel</td>
                             </tr>
                         </tbody>
                     </table>

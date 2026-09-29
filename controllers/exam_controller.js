@@ -149,8 +149,46 @@ async function get_session_summary_handler(req, res) {
     }
 }
 
+/**
+ * Handler proxy untuk mengambil snapshot frame dari IP Webcam (Android/ESP32) tanpa terhalang CORS.
+ * @param {import('express').Request} req - Express request
+ * @param {import('express').Response} res - Express response
+ */
+async function proxy_ip_camera_shot_handler(req, res) {
+    const target_url = req.query.url;
+    if (!target_url) {
+        return res.status(400).json({
+            success: false,
+            message: 'Parameter query url wajib disertakan.'
+        });
+    }
+
+    try {
+        const response = await fetch(target_url, { signal: AbortSignal.timeout(4000) });
+        if (!response.ok) {
+            return res.status(response.status).json({
+                success: false,
+                message: `Gagal mengambil frame dari IP Camera (HTTP ${response.status}).`
+            });
+        }
+
+        const buffer = await response.arrayBuffer();
+        res.setHeader('Content-Type', response.headers.get('content-type') || 'image/jpeg');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        return res.send(Buffer.from(buffer));
+    } catch (error) {
+        return res.status(502).json({
+            success: false,
+            message: 'Gagal menghubungi IP Camera: ' + error.message
+        });
+    }
+}
+
 module.exports = {
     submit_batch_answers_handler,
     get_live_stats_handler,
-    get_session_summary_handler
+    get_session_summary_handler,
+    proxy_ip_camera_shot_handler
 };
+

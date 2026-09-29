@@ -98,12 +98,14 @@ Setiap kali iterasi modul selesai, checklist berikut wajib dipenuhi dan diperbar
   - Streaming kamera web dengan pemilihan hardware (kamera laptop, USB webcam, kamera belakang).
   - Algoritma pembacaan sudut vektor orientasi $\theta = \text{atan2}(\Delta y, \Delta x) \pmod{360}$.
   - Deteksi multi-QR paralel hingga 25 kartu secara simultan.
+  - Dukungan **Dual Camera Mode**: Webcam bawaan laptop/USB dan **IP Webcam nirkabel via HP Android** (Wi-Fi).
+  - Mekanisme **Anti-CORS Stream Proxy** (`/api/exam/proxy-shot`) untuk memutar stream kamera HP tanpa terhalang kebijakan keamanan cross-origin browser.
   - Overlay kanvas **Augmented Reality (AR)** dengan garis batas hijau dan label nama siswa melayang.
   - Fallback pengujian menggunakan file foto/gambar.
   - Sinkronisasi jawaban real-time ke database menggunakan operasi *Upsert*.
   - Diagram distribusi suara live dan checklist respon kehadiran per siswa.
 - **Tabel MySQL Terkait:** `exam_results`.
-- **Endpoints:** `POST /api/exam/submit-answers`, `GET /api/exam/live-stats`, `GET /api/exam/summary/:session_id`.
+- **Endpoints:** `POST /api/exam/submit-answers`, `GET /api/exam/live-stats`, `GET /api/exam/summary/:session_id`, `GET /api/exam/proxy-shot`.
 
 ---
 
