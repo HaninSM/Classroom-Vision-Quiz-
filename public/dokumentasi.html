@@ -563,6 +563,27 @@
                     </ol>
                 </div>
 
+                <!-- HTTPS Wireless Tunnel & Chrome Flags Box for Mobile Scanning -->
+                <div class="p-5 bg-indigo-50/70 border border-indigo-200 rounded-2xl space-y-3 text-xs">
+                    <h4 class="font-black text-indigo-950 flex items-center gap-2">
+                        <span>🌐</span>
+                        <span>Ingin Memindai Langsung dari Browser Chrome HP Android? (Aturan HTTPS Secure Context):</span>
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed">
+                        Browser Chrome di Android memblokir kamera jika dibuka via HTTP non-localhost. Gunakan salah satu solusi berikut:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                        <div class="p-3 bg-white rounded-xl border border-indigo-100 shadow-sm space-y-1">
+                            <span class="font-bold text-indigo-700">Opsi 1: Tunnel HTTPS Nirkabel (1 Perintah)</span>
+                            <p class="text-[11px] text-slate-600">Jalankan <code>npm run tunnel</code> di terminal Windows. Buka tautan HTTPS publik yang dihasilkan di Chrome HP. Kamera langsung aktif tanpa izin terblokir.</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border border-indigo-100 shadow-sm space-y-1">
+                            <span class="font-bold text-indigo-700">Opsi 2: Setel Flag Chrome (Mode Offline LAN)</span>
+                            <p class="text-[11px] text-slate-600">Buka <code>chrome://flags/#unsafely-treat-insecure-origin-as-secure</code> di HP, masukkan IP laptop (misal <code>http://192.168.18.6:3000</code>), ubah ke <em>Enabled</em>, lalu <em>Relaunch</em>.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Visual Mockup Pemindai Kamera with Dual Mode -->
                 <div class="browser-mockup bg-slate-950 text-white">
                     <div class="browser-header bg-slate-900 border-slate-800 text-white">

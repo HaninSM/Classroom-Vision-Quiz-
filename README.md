@@ -85,7 +85,76 @@ Buka peramban (browser) di: `http://localhost:3000`.
 
 ---
 
-## 📡 Dokumentasi Endpoint API (Modul 1)
+## 🌐 Pengaturan Akses Smartphone & HTTPS via Tunnel Nirkabel
+
+Jika server CVQ dijalankan pada laptop/PC Windows dan guru ingin memindai menggunakan **kamera smartphone Android langsung melalui peramban (Chrome Mobile)**:
+
+### ⚠️ Mengapa Memerlukan HTTPS?
+Peramban Google Chrome di Android menerapkan aturan keamanan *Secure Context*: API kamera (`navigator.mediaDevices.getUserMedia`) **hanya diizinkan** pada protokol `https://` atau domain `localhost`. Jika smartphone membuka alamat IP lokal laptop via HTTP biasa (misalnya: `http://192.168.x.x:3000`), peramban Android akan memblokir akses kamera.
+
+Ada dua opsi solusi mudah untuk mengatasinya:
+
+---
+
+### Opsi 1: Menggunakan Tunnel HTTPS Nirkabel (Rekomendasi Paling Praktis)
+Tunneling memberikan tautan publik resmi berprotokol HTTPS secara instan tanpa perlu pengaturan sertifikat SSL yang rumit.
+
+#### Cara A: Menggunakan LocalTunnel (1 Perintah Saja)
+Jalankan perintah berikut di terminal komputer Windows Anda:
+```bash
+npm run tunnel
+```
+*(Atau jalankan: `npx localtunnel --port 3000`)*
+
+Terminal akan menghasilkan URL HTTPS resmi, misalnya:
+```text
+your url is: https://cvq-vision-smart.loca.lt
+```
+1. Buka URL HTTPS tersebut dari Chrome Android di HP Anda.
+2. Jika muncul halaman *friendly reminder* dari Localtunnel, masukkan IP publik server Anda lalu klik *Click to Submit*.
+3. Buka halaman pemindai: `/scanner.html`. Dialog izin kamera akan langsung muncul dan kamera ponsel langsung aktif!
+
+#### Cara B: Menggunakan Cloudflare Tunnel (Cepat & Stabil)
+Jika Anda memiliki `cloudflared`, jalankan:
+```bash
+cloudflared tunnel --url http://localhost:3000
+```
+Salin tautan `https://xxxx.trycloudflare.com` yang diberikan dan buka di ponsel Android.
+
+#### Cara C: Menggunakan Ngrok
+```bash
+ngrok http 3000
+```
+Salin tautan `https://xxxx.ngrok-free.app` dan buka di ponsel Android.
+
+---
+
+### Opsi 2: Mengaktifkan Flag di Chrome Android (Offline / Tanpa Kuota Internet)
+Jika kelas Anda berada di ruangan tanpa koneksi internet (hanya menggunakan Wi-Fi lokal atau Hotspot HP dari ponsel):
+
+1. Di smartphone Android, buka Google Chrome dan ketik pada bilah alamat:
+   ```text
+   chrome://flags/#unsafely-treat-insecure-origin-as-secure
+   ```
+2. Pada kolom **Insecure origins treated as secure**, masukkan alamat IP laptop server Anda, contoh:
+   ```text
+   http://192.168.18.6:3000
+   ```
+   *(Sesuaikan dengan IP laptop Windows Anda)*
+3. Ubah status dropdown dari **Disabled** menjadi **Enabled**.
+4. Tekan tombol **Relaunch** di pojok kanan bawah Chrome untuk memulai ulang browser.
+5. Buka `http://<IP-Laptop>:3000/scanner.html`. Chrome Android sekarang memperlakukan server Anda aman layaknya HTTPS, dan kamera HP langsung dapat dinyalakan.
+
+---
+
+### 🪞 Fitur Khusus Pemindaian Kamera Ponsel
+* **Prioritas Otomatis Kamera Belakang:** Sistem otomatis memilih kamera belakang (*rear/environment camera*) agar guru dapat menyorot seluruh siswa di kelas dengan sudut pandang lebar.
+* **Mode Cermin Kamera Depan (*Selfie*):** Jika menggunakan kamera depan, centang opsi **"🪞 Kamera Depan (Cermin)"**. Sistem secara otomatis menginversi sudut rotasi horizontal $\theta_{\text{koreksi}} = (360^\circ - \theta) \pmod{360}$ sehingga kartu jawaban **B** dan **D** tidak pernah tertukar akibat pantulan optik cermin.
+* **Mode Nirkabel IP Webcam (Aplikasi HP):** Jika tidak ingin membuka browser di HP, guru cukup memasang aplikasi gratis **"IP Webcam"** di Android, klik *Start server*, lalu hubungkan ke laptop melalui tab *📱 IP Webcam (HP Android)* di `scanner.html`. Sistem menggunakan **Anti-CORS Proxy** (`/api/exam/proxy-shot`) bawaan.
+
+---
+
+## 📡 Dokumentasi Endpoint API
 
 ### 1. Inisialisasi & Health Check
 - **`GET /api/health`**
