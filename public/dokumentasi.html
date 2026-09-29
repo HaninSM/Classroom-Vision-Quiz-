@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVQ - Dokumentasi Sistem & Manual Pengguna</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+        /* Mockup Window Styling */
+        .browser-mockup {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+        .browser-header {
+            background: #f1f5f9;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-bold text-xl backdrop-blur-sm">
+                    📖
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Classroom Vision Quiz &bull; Dokumentasi</h1>
+                    <p class="text-xs text-indigo-100 font-medium">Buku Panduan, Arsitektur, & Visualisasi Antarmuka</p>
+                </div>
+            </div>
+
+            <!-- Global Module Navigation Links -->
+            <nav class="flex items-center gap-1.5 text-xs font-semibold">
+                <a href="/" class="px-2.5 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    🏫 Kelas
+                </a>
+                <a href="/print_cards.html" class="px-2.5 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    🖨️ Kartu
+                </a>
+                <a href="/questions.html" class="px-2.5 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    📝 Soal
+                </a>
+                <a href="/tv_quiz.html" class="px-2.5 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    📺 Layar TV
+                </a>
+                <a href="/scanner.html" class="px-2.5 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    📷 Pindai Live
+                </a>
+                <a href="/dokumentasi.html" class="px-3 py-1.5 rounded-lg bg-white text-indigo-700 font-bold shadow-sm transition">
+                    📖 Panduan
+                </a>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Main Content Container with Sidebar -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Sidebar Navigation (3 cols) -->
+        <aside class="lg:col-span-3 space-y-6">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 sticky top-24 space-y-4 text-xs font-semibold">
+                <h3 class="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Daftar Isi Dokumentasi</h3>
+                
+                <ul class="space-y-1.5 text-slate-600">
+                    <li>
+                        <a href="#section-overview" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>💡</span> <span>Ikhtisar Sistem CVQ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-dod" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>✅</span> <span>Checklist Definition of Done</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-form1" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>🏫</span> <span>Modul 1: Form Kelas & Siswa</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-form2" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>🖨️</span> <span>Modul 2: Cetak Lembar QR 4 Sisi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-form3" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>📝</span> <span>Modul 3: Bank Soal Pilihan Ganda</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-form4" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>📺</span> <span>Modul 3B: Layar TV Proyektor</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-form5" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>📷</span> <span>Modul 4: Pemindai Kamera Live (AR)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-math" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>📐</span> <span>Algoritma Rotasi Vektor & Sudut</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#section-api" class="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition">
+                            <span>📡</span> <span>Referensi RESTful API</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="pt-3 border-t border-slate-100">
+                    <a href="/PRD.md" target="_blank" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center justify-center gap-1.5 transition text-[11px] font-bold">
+                        📄 Buka File PRD.md Resmi &rarr;
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Content Body (9 cols) -->
+        <main class="lg:col-span-9 space-y-12">
+            
+            <!-- SECTION 1: IKHTISAR SISTEM -->
+            <section id="section-overview" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
+                    <span>💡 Ikhtisar Solusi</span>
+                </div>
+                <h2 class="text-2xl font-black text-slate-900 leading-tight">
+                    Classroom Vision Quiz (CVQ): Ujian Interaktif Tanpa Ponsel
+                </h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    CVQ mengatasi kendala kebijakan larangan penggunaan smartphone di sekolah. Dengan menggabungkan teknologi <strong>Computer Vision real-time</strong> dan <strong>lembar jawaban fisik berorientasi 4 sisi</strong>, guru dapat mengadakan kuis interaktif yang cepat, adil, dan menyenangkan bagi seluruh siswa hanya dengan memanfaatkan satu kamera laptop atau webcam di depan kelas.
+                </p>
+
+                <!-- Flowchart Mini -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-3">
+                    <div class="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 text-center">
+                        <span class="text-2xl">1️⃣</span>
+                        <h4 class="font-bold text-xs text-indigo-900 mt-1">Input Kelas</h4>
+                        <p class="text-[11px] text-indigo-700 mt-0.5">Daftar maks. 25 siswa</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-center">
+                        <span class="text-2xl">2️⃣</span>
+                        <h4 class="font-bold text-xs text-emerald-900 mt-1">Cetak Kartu</h4>
+                        <p class="text-[11px] text-emerald-700 mt-0.5">QR 4 Sisi (A, B, C, D)</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-100 text-center">
+                        <span class="text-2xl">3️⃣</span>
+                        <h4 class="font-bold text-xs text-blue-900 mt-1">Tayang di TV</h4>
+                        <p class="text-[11px] text-blue-700 mt-0.5">Soal di proyektor kelas</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-100 text-center">
+                        <span class="text-2xl">4️⃣</span>
+                        <h4 class="font-bold text-xs text-amber-900 mt-1">Pindai Kamera</h4>
+                        <p class="text-[11px] text-amber-700 mt-0.5">Computer Vision AR</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: CHECKLIST DEFINITION OF DONE (DOD) -->
+            <section id="section-dod" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider">Quality Assurance</span>
+                        <h3 class="text-lg font-black text-slate-900 mt-0.5">Checklist Definition of Done (DoD) Iterasi</h3>
+                    </div>
+                    <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-black">
+                        100% Selesai & Terverifikasi
+                    </span>
+                </div>
+
+                <p class="text-xs text-slate-500">
+                    Setiap iterasi pengembangan sistem CVQ diverifikasi dengan checklist baku di bawah ini sebelum dinyatakan lulus produksi:
+                </p>
+
+                <div class="space-y-2 text-xs">
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">1. Standar Gaya Penulisan Kode:</strong>
+                            <span class="text-slate-500 block">Variabel & fungsi memakai <code>snake_case</code>, class memakai <code>CamelCase</code>, dilengkapi JSDoc.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">2. Struktur Proyek Modular:</strong>
+                            <span class="text-slate-500 block">Pemisahan concerns yang rapi: config, models, controllers, routes, dan public views.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">3. Integritas Database & Transaksi ACID:</strong>
+                            <span class="text-slate-500 block">Koneksi pool MySQL, auto-init tabel, foreign keys, dan operasi upsert exam results.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">4. Validasi Masukan Ganda:</strong>
+                            <span class="text-slate-500 block">Batas maksimal 25 siswa dan keharusan 4 opsi soal divalidasi di UI dan Backend.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">5. Algoritma Pembacaan Sudut QR Code:</strong>
+                            <span class="text-slate-500 block">Perhitungan $\theta = \text{atan2}(\Delta y, \Delta x)$ dengan toleransi $\pm 45^\circ$ untuk memetakan A, B, C, D.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 cursor-default">
+                        <input type="checkbox" checked disabled class="w-4 h-4 text-emerald-600 rounded">
+                        <div class="flex-1">
+                            <strong class="text-slate-800">6. Pembaruan PRD & Dokumentasi Lengkap:</strong>
+                            <span class="text-slate-500 block">File <code>PRD.md</code> dan <code>dokumentasi.html</code> sinkron dengan kondisi terkini proyek.</span>
+                        </div>
+                        <span class="text-emerald-600 font-bold">PASSED</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- SECTION 3: MODUL 1 - FORM KELAS & SISWA -->
+            <section id="section-form1" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Modul 1</span>
+                        <h3 class="text-xl font-black text-slate-900">Formulir Input Kelas & Siswa Dinamis</h3>
+                    </div>
+                    <a href="/" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg border border-indigo-200 hover:bg-indigo-100 transition">
+                        Buka Halaman Form &rarr;
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Halaman ini digunakan oleh guru untuk membuat kelas baru dan memasukkan nama-nama siswa (maksimal 25 murid). Sistem juga menyediakan generator baris cepat dan fitur <em>Bulk Paste</em> untuk menyalin daftar siswa dari Excel secara instan.
+                </p>
+
+                <!-- Visual Screenshot / UI Representation -->
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <span class="dot bg-rose-400"></span>
+                        <span class="dot bg-amber-400"></span>
+                        <span class="dot bg-emerald-400"></span>
+                        <span class="text-[11px] font-mono text-slate-500 ml-2">http://localhost:3000/ (Form Kelas & Siswa)</span>
+                    </div>
+                    <div class="p-6 bg-slate-50 grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <!-- Mockup Left -->
+                        <div class="md:col-span-7 bg-white p-5 rounded-xl border border-slate-200 space-y-3">
+                            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                                <span class="font-bold text-xs text-slate-800">Buat Kelas & Siswa Baru</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">2 / 25 Siswa</span>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase">Nama Kelas</label>
+                                <div class="p-2 text-xs bg-slate-50 rounded-lg border border-slate-200 font-semibold text-slate-700">Kelas 10 IPA 1</div>
+                            </div>
+                            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] bg-slate-200 px-2 py-1 rounded font-bold">Jumlah: 2</span>
+                                    <span class="text-[10px] bg-indigo-600 text-white px-2 py-1 rounded font-bold">Set Baris</span>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 text-center text-xs font-bold text-slate-400">1</span>
+                                    <div class="flex-1 p-2 text-xs bg-white border border-slate-300 rounded font-medium">Ahmad Dahlan</div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 text-center text-xs font-bold text-slate-400">2</span>
+                                    <div class="flex-1 p-2 text-xs bg-white border border-slate-300 rounded font-medium">Budi Santoso</div>
+                                </div>
+                            </div>
+                            <button class="w-full py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">Simpan Kelas & Daftar Siswa</button>
+                        </div>
+                        <!-- Mockup Right -->
+                        <div class="md:col-span-5 space-y-3">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                                <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Tersimpan</span>
+                                <h5 class="text-xs font-bold text-slate-800">Kelas 10 IPA 1 (2 Siswa)</h5>
+                                <div class="space-y-1 text-[11px]">
+                                    <div class="flex justify-between p-1.5 bg-slate-50 rounded border border-slate-200">
+                                        <span>Ahmad Dahlan</span>
+                                        <code class="text-[9px] bg-indigo-50 px-1 text-indigo-700 rounded">qr_09e363...</code>
+                                    </div>
+                                    <div class="flex justify-between p-1.5 bg-slate-50 rounded border border-slate-200">
+                                        <span>Budi Santoso</span>
+                                        <code class="text-[9px] bg-indigo-50 px-1 text-indigo-700 rounded">qr_a7761a...</code>
+                                    </div>
+                                </div>
+                                <a href="/print_cards.html" class="block text-center py-1.5 bg-indigo-600 text-white font-bold rounded text-[11px]">🖨️ Cetak Lembar Siswa &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: MODUL 2 - CETAK LEMBAR QR 4 SISI -->
+            <section id="section-form2" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Modul 2</span>
+                        <h3 class="text-xl font-black text-slate-900">Lembar Jawaban Fisik QR Code 4 Sisi</h3>
+                    </div>
+                    <a href="/print_cards.html" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-200 hover:bg-emerald-100 transition">
+                        Buka Halaman Cetak &rarr;
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Setiap siswa menerima 1 lembar fisik berukuran A4 (atau kartu ukuran setengah A4). Di keempat sisi luar terdapat huruf pilihan ganda (**A, B, C, D**). Di tengah terdapat QR Code unik siswa yang dibuat dengan tingkat toleransi kesalahan tinggi (*Error Correction High*).
+                </p>
+
+                <!-- Visual Mockup Lembar Jawaban -->
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <span class="dot bg-rose-400"></span>
+                        <span class="dot bg-amber-400"></span>
+                        <span class="dot bg-emerald-400"></span>
+                        <span class="text-[11px] font-mono text-slate-500 ml-2">http://localhost:3000/print_cards.html (Lembar Cetak A4)</span>
+                    </div>
+                    <div class="p-8 bg-slate-100 flex justify-center">
+                        <!-- Physical Card Mockup -->
+                        <div class="w-full max-w-md bg-white border-4 border-slate-900 rounded-2xl p-6 shadow-md flex flex-col justify-between items-center text-center space-y-4">
+                            <!-- TOP SIDE A -->
+                            <div class="w-full pb-2 border-b-2 border-dashed border-slate-300">
+                                <span class="text-[10px] font-black uppercase text-slate-400 tracking-wider">&uarr; HADAPKAN KE ATAS &uarr;</span>
+                                <div class="text-4xl font-black text-slate-900">A</div>
+                            </div>
+                            <!-- MIDDLE D, QR, B -->
+                            <div class="w-full flex items-center justify-between px-2">
+                                <div class="w-12 text-center border-r-2 border-dashed border-slate-300 pr-2">
+                                    <div class="text-3xl font-black text-slate-900 rotate-[-90deg]">&uarr; D</div>
+                                </div>
+                                <div class="flex-1 flex flex-col items-center">
+                                    <span class="text-[10px] font-black bg-slate-900 text-white px-2 py-0.5 rounded-full">NO. 1</span>
+                                    <h4 class="text-sm font-black text-slate-900 uppercase mt-1">AHMAD DAHLAN</h4>
+                                    <div class="w-32 h-32 my-2 border-2 border-slate-900 rounded-xl flex items-center justify-center bg-white p-2">
+                                        <div class="w-full h-full bg-slate-900 flex items-center justify-center text-white text-xs font-mono font-bold">
+                                            [ QR CODE ]
+                                        </div>
+                                    </div>
+                                    <span class="text-[9px] font-mono text-slate-400">qr_09e36352...</span>
+                                </div>
+                                <div class="w-12 text-center border-l-2 border-dashed border-slate-300 pl-2">
+                                    <div class="text-3xl font-black text-slate-900 rotate-[90deg]">&uarr; B</div>
+                                </div>
+                            </div>
+                            <!-- BOTTOM SIDE C -->
+                            <div class="w-full pt-2 border-t-2 border-dashed border-slate-300">
+                                <div class="text-4xl font-black text-slate-900 rotate-[180deg]">C</div>
+                                <span class="text-[10px] font-black uppercase text-slate-400 tracking-wider">&uarr; OPSI C &uarr;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: MODUL 3 - BANK SOAL PILIHAN GANDA -->
+            <section id="section-form3" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Modul 3</span>
+                        <h3 class="text-xl font-black text-slate-900">Manajemen Bank Soal Pilihan Ganda</h3>
+                    </div>
+                    <a href="/questions.html" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
+                        Buka Bank Soal &rarr;
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Guru dapat memasukkan soal pilihan ganda lengkap dengan 4 opsi pilihan (**A, B, C, D**) dan menentukan satu kunci jawaban yang sah melalui radio button.
+                </p>
+
+                <!-- Visual Mockup Bank Soal -->
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <span class="dot bg-rose-400"></span>
+                        <span class="dot bg-amber-400"></span>
+                        <span class="dot bg-emerald-400"></span>
+                        <span class="text-[11px] font-mono text-slate-500 ml-2">http://localhost:3000/questions.html (Bank Soal Kuis)</span>
+                    </div>
+                    <div class="p-6 bg-slate-50 grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <div class="md:col-span-7 bg-white p-5 rounded-xl border border-slate-200 space-y-3">
+                            <span class="font-bold text-xs text-slate-800">Buat Soal Kuis Baru</span>
+                            <div class="p-2 text-xs bg-slate-50 rounded-lg border border-slate-200 text-slate-700">
+                                Organel sel yang menghasilkan energi utama (ATP) adalah...
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex items-center gap-2 p-1.5 bg-rose-50 border border-rose-200 rounded-lg">
+                                    <span class="w-5 h-5 bg-rose-600 text-white rounded text-center font-bold text-[10px] flex items-center justify-center">A</span>
+                                    <span>Mitokondria (Kunci Jawaban &bull; Dipilih)</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-1.5 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <span class="w-5 h-5 bg-blue-600 text-white rounded text-center font-bold text-[10px] flex items-center justify-center">B</span>
+                                    <span>Ribosom</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-1.5 bg-amber-50 border border-amber-200 rounded-lg">
+                                    <span class="w-5 h-5 bg-amber-600 text-white rounded text-center font-bold text-[10px] flex items-center justify-center">C</span>
+                                    <span>Kloroplas</span>
+                                </div>
+                                <div class="flex items-center gap-2 p-1.5 bg-emerald-50 border border-emerald-200 rounded-lg">
+                                    <span class="w-5 h-5 bg-emerald-600 text-white rounded text-center font-bold text-[10px] flex items-center justify-center">D</span>
+                                    <span>Badan Golgi</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">Simpan Soal ke Bank</button>
+                        </div>
+                        <div class="md:col-span-5 bg-gradient-to-br from-indigo-700 to-indigo-900 text-white p-5 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <span class="text-[9px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">Presenter Mode</span>
+                                <h4 class="font-bold text-sm mt-2">Layar TV Proyektor</h4>
+                                <p class="text-[11px] text-indigo-100 mt-1">Tayangkan soal ke proyektor kelas dalam resolusi besar.</p>
+                            </div>
+                            <a href="/tv_quiz.html" class="mt-4 text-center py-2 bg-emerald-400 text-slate-950 font-bold rounded-lg text-xs">📺 Buka Layar TV &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: MODUL 3B - LAYAR TV PROYEKTOR KELAS -->
+            <section id="section-form4" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">Modul 3B</span>
+                        <h3 class="text-xl font-black text-slate-900">Layar TV Proyektor Kuis Layar Penuh</h3>
+                    </div>
+                    <a href="/tv_quiz.html" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-purple-50 text-purple-700 rounded-lg border border-purple-200 hover:bg-purple-100 transition">
+                        Buka Layar TV &rarr;
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Dirancang dengan tema gelap kontras tinggi (*Dark Mode*) dan tipografi ekstra besar agar terbaca dengan jelas oleh 25 siswa dari sudut terjauh ruangan kelas (jarak 5-10 meter). Mendukung tombol panah keyboard remote presenter.
+                </p>
+
+                <!-- Visual Mockup TV Display -->
+                <div class="browser-mockup bg-slate-950 text-white">
+                    <div class="browser-header bg-slate-900 border-slate-800 text-white">
+                        <span class="dot bg-rose-500"></span>
+                        <span class="dot bg-amber-500"></span>
+                        <span class="dot bg-emerald-500"></span>
+                        <span class="text-[11px] font-mono text-slate-400 ml-2">http://localhost:3000/tv_quiz.html (Layar Proyektor TV)</span>
+                    </div>
+                    <div class="p-8 space-y-6">
+                        <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl">
+                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">SOAL 1 DARI 5 &bull; KELAS 10 IPA 1</span>
+                            <h2 class="text-xl font-black text-white mt-1">Organel sel yang berfungsi sebagai penghasil energi utama (ATP) adalah?</h2>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-xs font-bold">
+                            <div class="p-4 bg-slate-900 border-2 border-rose-500/50 rounded-2xl flex items-center gap-3">
+                                <span class="w-8 h-8 bg-rose-600 text-white rounded-lg flex items-center justify-center font-black">A</span>
+                                <span class="text-sm">Mitokondria</span>
+                            </div>
+                            <div class="p-4 bg-slate-900 border-2 border-blue-500/50 rounded-2xl flex items-center gap-3">
+                                <span class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-black">B</span>
+                                <span class="text-sm">Ribosom</span>
+                            </div>
+                            <div class="p-4 bg-slate-900 border-2 border-amber-500/50 rounded-2xl flex items-center gap-3">
+                                <span class="w-8 h-8 bg-amber-500 text-slate-950 rounded-lg flex items-center justify-center font-black">C</span>
+                                <span class="text-sm">Kloroplas</span>
+                            </div>
+                            <div class="p-4 bg-slate-900 border-2 border-emerald-500/50 rounded-2xl flex items-center gap-3">
+                                <span class="w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center font-black">D</span>
+                                <span class="text-sm">Badan Golgi</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-2 border-t border-slate-800 text-slate-400">
+                            <span>Tekan <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-white font-mono">Spasi</kbd> untuk Tampilkan Kunci Jawaban</span>
+                            <span class="text-emerald-400 font-bold">📷 Live Scanner Terintegrasi</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: MODUL 4 - PEMINDAI KAMERA LIVE COMPUTER VISION -->
+            <section id="section-form5" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Modul 4 (Inti Sistem)</span>
+                        <h3 class="text-xl font-black text-slate-900">Pemindai Kamera Live Computer Vision (AR)</h3>
+                    </div>
+                    <a href="/scanner.html" target="_blank" class="text-xs font-bold px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg border border-amber-200 hover:bg-amber-100 transition">
+                        Buka Pemindai Live &rarr;
+                    </a>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Kamera guru menyorot seluruh siswa di kelas. Sistem mendeteksi titik sudut QR Code secara paralel, menghitung sudut putar kertas, dan menampilkan overlay <strong>Augmented Reality (AR)</strong> langsung di atas gambar setiap siswa yang mengangkat kartu.
+                </p>
+
+                <!-- Visual Mockup Pemindai Kamera -->
+                <div class="browser-mockup bg-slate-950 text-white">
+                    <div class="browser-header bg-slate-900 border-slate-800 text-white">
+                        <span class="dot bg-rose-500"></span>
+                        <span class="dot bg-amber-500"></span>
+                        <span class="dot bg-emerald-500"></span>
+                        <span class="text-[11px] font-mono text-slate-400 ml-2">http://localhost:3000/scanner.html (AR Live Scanner)</span>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+                        <!-- Camera Viewport with AR badges -->
+                        <div class="md:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl relative aspect-video flex items-center justify-center overflow-hidden p-4">
+                            <!-- AR Simulated Box 1 -->
+                            <div class="absolute left-10 top-12 border-2 border-emerald-400 bg-emerald-400/20 p-4 rounded-lg flex flex-col items-center">
+                                <span class="bg-slate-900 text-white font-bold text-[10px] px-2 py-0.5 rounded border border-emerald-400 -mt-7 shadow">
+                                    Ahmad: [ A ]
+                                </span>
+                                <span class="text-2xl mt-1">⬛</span>
+                            </div>
+                            <!-- AR Simulated Box 2 -->
+                            <div class="absolute right-12 top-16 border-2 border-blue-400 bg-blue-400/20 p-4 rounded-lg flex flex-col items-center">
+                                <span class="bg-slate-900 text-white font-bold text-[10px] px-2 py-0.5 rounded border border-blue-400 -mt-7 shadow">
+                                    Budi: [ B ]
+                                </span>
+                                <span class="text-2xl mt-1">⬛</span>
+                            </div>
+                            <span class="text-xs text-slate-500 font-mono">[ Video Kamera Live + AR Canvas Overlay ]</span>
+                        </div>
+                        <!-- Live Stats Side Panel -->
+                        <div class="md:col-span-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-4 text-xs">
+                            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+                                <span class="font-bold text-slate-300">Distribusi Suara</span>
+                                <span class="text-emerald-400 font-black">2 / 2 Siswa</span>
+                            </div>
+                            <div class="space-y-2">
+                                <div>
+                                    <div class="flex justify-between font-bold text-[11px]">
+                                        <span class="text-rose-400">Opsi A</span>
+                                        <span>1 (50%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-0.5">
+                                        <div class="bg-rose-500 h-2 w-1/2"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between font-bold text-[11px]">
+                                        <span class="text-blue-400">Opsi B</span>
+                                        <span>1 (50%)</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-0.5">
+                                        <div class="bg-blue-500 h-2 w-1/2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-slate-800 space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400">Status Kehadiran Respon:</span>
+                                <div class="p-1 bg-slate-800 rounded flex justify-between text-[11px]">
+                                    <span class="text-emerald-400 font-bold">&check; Ahmad Dahlan</span>
+                                    <span class="bg-rose-500 text-white px-1.5 rounded font-black">A</span>
+                                </div>
+                                <div class="p-1 bg-slate-800 rounded flex justify-between text-[11px]">
+                                    <span class="text-emerald-400 font-bold">&check; Budi Santoso</span>
+                                    <span class="bg-blue-500 text-white px-1.5 rounded font-black">B</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 8: ALGORITMA ROTASI & SUDUT -->
+            <section id="section-math" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
+                    <span>📐 Matematika Computer Vision</span>
+                </div>
+                <h3 class="text-xl font-black text-slate-900">Algoritma Penentuan Opsi Jawaban (Rotation Angle)</h3>
+                
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Setiap kode QR memiliki 4 titik sudut yang dihasilkan oleh Computer Vision: <code>top-left (p0)</code>, <code>top-right (p1)</code>, <code>bottom-right (p2)</code>, dan <code>bottom-left (p3)</code>. Vektor orientasi dihitung dari titik <code>p0</code> ke <code>p1</code>:
+                </p>
+
+                <div class="p-4 bg-slate-900 text-emerald-300 font-mono text-xs rounded-2xl overflow-x-auto space-y-1">
+                    <p class="text-slate-400">// Menghitung sudut rotasi dalam derajat [0, 360):</p>
+                    <p>const delta_x = p1.x - p0.x;</p>
+                    <p>const delta_y = p1.y - p0.y;</p>
+                    <p>const theta = (Math.atan2(delta_y, delta_x) * 180 / Math.PI + 360) % 360;</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-semibold pt-2">
+                    <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl text-center">
+                        <span class="text-rose-700 font-black text-base">Opsi A</span>
+                        <p class="text-[11px] text-slate-600 mt-1">315&deg; - 45&deg; (0&deg; &plusmn; 45&deg;)</p>
+                        <span class="text-[10px] text-rose-600 block mt-0.5">Sisi Atas Normal</span>
+                    </div>
+                    <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-center">
+                        <span class="text-blue-700 font-black text-base">Opsi B</span>
+                        <p class="text-[11px] text-slate-600 mt-1">45&deg; - 135&deg; (90&deg; &plusmn; 45&deg;)</p>
+                        <span class="text-[10px] text-blue-600 block mt-0.5">Sisi Kanan di Atas</span>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
+                        <span class="text-amber-700 font-black text-base">Opsi C</span>
+                        <p class="text-[11px] text-slate-600 mt-1">135&deg; - 225&deg; (180&deg; &plusmn; 45&deg;)</p>
+                        <span class="text-[10px] text-amber-600 block mt-0.5">Sisi Bawah di Atas</span>
+                    </div>
+                    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
+                        <span class="text-emerald-700 font-black text-base">Opsi D</span>
+                        <p class="text-[11px] text-slate-600 mt-1">225&deg; - 315&deg; (270&deg; &plusmn; 45&deg;)</p>
+                        <span class="text-[10px] text-emerald-600 block mt-0.5">Sisi Kiri di Atas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 9: REFERENSI RESTful API -->
+            <section id="section-api" class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-4">
+                <div class="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
+                    <span>📡 Arsitektur API</span>
+                </div>
+                <h3 class="text-xl font-black text-slate-900">Daftar Endpoint RESTful API Backend</h3>
+                
+                <div class="overflow-x-auto text-xs">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px]">
+                                <th class="p-3">Metode</th>
+                                <th class="p-3">Endpoint</th>
+                                <th class="p-3">Modul</th>
+                                <th class="p-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/health</td>
+                                <td class="p-3">Core</td>
+                                <td class="p-3 text-slate-500">Pengecekan kesiapan server backend</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">POST</span></td>
+                                <td class="p-3 font-mono font-bold">/api/classes</td>
+                                <td class="p-3">Modul 1</td>
+                                <td class="p-3 text-slate-500">Membuat kelas & daftar siswa (maks 25 murid)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/classes</td>
+                                <td class="p-3">Modul 1</td>
+                                <td class="p-3 text-slate-500">Mengambil seluruh daftar kelas tersimpan</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/classes/:id/cards</td>
+                                <td class="p-3">Modul 2</td>
+                                <td class="p-3 text-slate-500">Mengambil data lembar cetak & QR code siswa</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">POST</span></td>
+                                <td class="p-3 font-mono font-bold">/api/questions</td>
+                                <td class="p-3">Modul 3</td>
+                                <td class="p-3 text-slate-500">Menambahkan soal pilihan ganda baru (A/B/C/D)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/questions</td>
+                                <td class="p-3">Modul 3</td>
+                                <td class="p-3 text-slate-500">Mengambil seluruh bank soal kuis</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-rose-100 text-rose-800">DELETE</span></td>
+                                <td class="p-3 font-mono font-bold">/api/questions/:id</td>
+                                <td class="p-3">Modul 3</td>
+                                <td class="p-3 text-slate-500">Menghapus butir soal kuis</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-emerald-100 text-emerald-800">POST</span></td>
+                                <td class="p-3 font-mono font-bold">/api/exam/submit-answers</td>
+                                <td class="p-3">Modul 4</td>
+                                <td class="p-3 text-slate-500">Menerima batch deteksi rotasi kartu dari kamera live</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] bg-blue-100 text-blue-800">GET</span></td>
+                                <td class="p-3 font-mono font-bold">/api/exam/live-stats</td>
+                                <td class="p-3">Modul 4</td>
+                                <td class="p-3 text-slate-500">Mengambil statistik distribusi live pilihan suara</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-auto text-center text-xs text-slate-500">
+        Classroom Vision Quiz (CVQ) &bull; Spec-Driven Development &bull; 2026
+    </footer>
+
+</body>
+</html>

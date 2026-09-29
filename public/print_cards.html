@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVQ - Cetak Lembar Jawaban QR 4 Sisi</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Orientasi Teks Sisi Luar agar Tegak saat Sisi Tersebut Diputar ke Atas */
+        .side-label-top {
+            /* Sisi A: Normal upright */
+            transform: rotate(0deg);
+        }
+        .side-label-right {
+            /* Sisi B: Diputar 90deg searah jarum jam */
+            transform: rotate(90deg);
+        }
+        .side-label-bottom {
+            /* Sisi C: Diputar 180deg */
+            transform: rotate(180deg);
+        }
+        .side-label-left {
+            /* Sisi D: Diputar 270deg */
+            transform: rotate(270deg);
+        }
+
+        /* Print Styling */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-card-container {
+                box-shadow: none !important;
+                border: 2px solid #000000 !important;
+                margin: 0 !important;
+                page-break-after: always;
+                break-after: page;
+            }
+            .card-1-per-page {
+                width: 100% !important;
+                height: 96vh !important;
+                max-width: none !important;
+            }
+            .card-2-per-page {
+                width: 100% !important;
+                height: 48vh !important;
+                page-break-after: auto;
+            }
+            .card-2-per-page:nth-child(2n) {
+                page-break-after: always;
+                break-after: page;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+
+    <!-- Control Header (Hidden when printed) -->
+    <header class="no-print bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            
+            <div class="flex items-center space-x-3">
+                <a href="/" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-xs font-semibold" title="Kembali ke Beranda">
+                    &larr; Kelas
+                </a>
+                <div>
+                    <h1 class="text-base font-bold text-slate-900 leading-tight">Cetak Lembar Jawaban QR (4 Sisi)</h1>
+                    <p id="class_subtitle" class="text-xs text-slate-500">Memuat data kelas...</p>
+                </div>
+            </div>
+
+            <!-- Global Nav Shortcut -->
+            <nav class="hidden md:flex items-center gap-1 text-xs font-semibold">
+                <a href="/" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition">
+                    🏫 Kelas
+                </a>
+                <a href="/print_cards.html" class="px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 font-bold transition">
+                    🖨️ Cetak Kartu
+                </a>
+                <a href="/questions.html" class="px-2.5 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition">
+                    📝 Bank Soal
+                </a>
+                <a href="/tv_quiz.html" class="px-2.5 py-1.5 rounded-lg text-emerald-700 hover:bg-emerald-50 font-bold transition">
+                    📺 Layar TV
+                </a>
+            </nav>
+
+            <!-- Print Actions & Layout Settings -->
+            <div class="flex items-center gap-2">
+                <!-- Class Selector if multiple classes -->
+                <select id="select_class_dropdown" class="text-xs font-medium px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">Pilih Kelas...</option>
+                </select>
+
+                <!-- Layout Selector -->
+                <select id="select_layout_mode" class="text-xs font-medium px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="1">1 Lembar / Halaman (A4)</option>
+                    <option value="2">2 Kartu / Halaman</option>
+                </select>
+
+                <!-- Print Trigger Button -->
+                <button 
+                    type="button" 
+                    id="btn_trigger_print" 
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow-md shadow-indigo-500/20 flex items-center gap-1.5 transition"
+                >
+                    🖨️ Cetak
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Container: Cards Preview Area -->
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- Loading State -->
+        <div id="loading_spinner_box" class="text-center py-16">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-sm font-semibold text-slate-600">Menyiapkan kartu QR code presisi tinggi untuk siswa...</p>
+        </div>
+
+        <!-- Cards Container -->
+        <div id="cards_render_container" class="space-y-8 print:space-y-0">
+            <!-- Cards will be injected dynamically -->
+        </div>
+
+    </main>
+
+    <!-- Script Logika Cetak Kartu -->
+    <script src="/js/print_cards.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVQ - Layar TV Kuis Proyektor</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Highlight Kunci Jawaban saat Diumumkan */
+        .option-card-correct {
+            box-shadow: 0 0 0 6px #10b981, 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
+            transform: scale(1.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Status Bar -->
+    <header class="bg-slate-900/90 border-b border-slate-800 px-6 py-3 flex items-center justify-between backdrop-blur-sm">
+        <div class="flex items-center space-x-4">
+            <a href="/" class="text-xs text-slate-400 hover:text-white bg-slate-800/80 px-3 py-1.5 rounded-lg transition" title="Kembali ke Beranda">
+                &larr; Beranda
+            </a>
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="active_class_badge" class="text-sm font-black text-white tracking-wide">
+                    MEMUAT KELAS...
+                </span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div id="question_counter_badge" class="text-xs font-black tracking-widest uppercase bg-indigo-950/80 text-indigo-300 border border-indigo-700/50 px-3.5 py-1.5 rounded-full">
+                SOAL 0 DARI 0
+            </div>
+            <a 
+                href="/dokumentasi.html" 
+                target="_blank" 
+                class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition font-semibold"
+            >
+                📖 Panduan
+            </a>
+            <button 
+                type="button" 
+                id="btn_fullscreen_toggle" 
+                class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition"
+            >
+                ⛶ Layar Penuh
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Quiz Display Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-6 flex flex-col justify-center gap-6">
+        
+        <!-- Loading State -->
+        <div id="tv_loading_box" class="text-center py-20">
+            <div class="w-14 h-14 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-lg font-bold text-slate-300">Menyiapkan materi kuis proyektor...</p>
+        </div>
+
+        <!-- No Questions State -->
+        <div id="tv_empty_box" class="hidden text-center py-16 bg-slate-900/60 rounded-3xl border border-slate-800 max-w-xl mx-auto p-8">
+            <p class="text-4xl mb-3">📝</p>
+            <h3 class="text-xl font-bold text-white mb-2">Belum Ada Soal di Bank Soal</h3>
+            <p class="text-sm text-slate-400 mb-6">Silakan buat beberapa soal pilihan ganda di halaman Bank Soal terlebih dahulu.</p>
+            <a href="/questions.html" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg transition">
+                + Tambah Soal Baru
+            </a>
+        </div>
+
+        <!-- Active Question Container -->
+        <div id="tv_question_content" class="hidden flex flex-col gap-6 w-full">
+            
+            <!-- Teks Pertanyaan Besar -->
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-950/50 to-slate-900 border-2 border-indigo-900/50 rounded-3xl p-6 sm:p-10 shadow-2xl">
+                <span class="text-xs font-black uppercase tracking-widest text-indigo-400">Pertanyaan</span>
+                <h2 id="tv_question_text" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mt-2 leading-relaxed">
+                    <!-- Teks pertanyaan dimuat di sini -->
+                </h2>
+            </div>
+
+            <!-- Grid 4 Opsi Jawaban (2x2) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                <!-- OPSI A (Merah) -->
+                <div id="card_option_a" class="option-card bg-slate-900/90 border-2 border-rose-600/40 rounded-3xl p-5 sm:p-6 flex items-center gap-5 shadow-lg transition-all">
+                    <span class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-rose-600 text-white font-black text-2xl sm:text-3xl flex items-center justify-center shrink-0 shadow-md">
+                        A
+                    </span>
+                    <p id="tv_option_a_text" class="text-lg sm:text-2xl font-bold text-slate-100 flex-1 leading-snug">
+                        <!-- Teks opsi A -->
+                    </p>
+                </div>
+
+                <!-- OPSI B (Biru) -->
+                <div id="card_option_b" class="option-card bg-slate-900/90 border-2 border-blue-600/40 rounded-3xl p-5 sm:p-6 flex items-center gap-5 shadow-lg transition-all">
+                    <span class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-600 text-white font-black text-2xl sm:text-3xl flex items-center justify-center shrink-0 shadow-md">
+                        B
+                    </span>
+                    <p id="tv_option_b_text" class="text-lg sm:text-2xl font-bold text-slate-100 flex-1 leading-snug">
+                        <!-- Teks opsi B -->
+                    </p>
+                </div>
+
+                <!-- OPSI C (Kuning / Oranye) -->
+                <div id="card_option_c" class="option-card bg-slate-900/90 border-2 border-amber-600/40 rounded-3xl p-5 sm:p-6 flex items-center gap-5 shadow-lg transition-all">
+                    <span class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-500 text-slate-950 font-black text-2xl sm:text-3xl flex items-center justify-center shrink-0 shadow-md">
+                        C
+                    </span>
+                    <p id="tv_option_c_text" class="text-lg sm:text-2xl font-bold text-slate-100 flex-1 leading-snug">
+                        <!-- Teks opsi C -->
+                    </p>
+                </div>
+
+                <!-- OPSI D (Hijau) -->
+                <div id="card_option_d" class="option-card bg-slate-900/90 border-2 border-emerald-600/40 rounded-3xl p-5 sm:p-6 flex items-center gap-5 shadow-lg transition-all">
+                    <span class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-emerald-600 text-white font-black text-2xl sm:text-3xl flex items-center justify-center shrink-0 shadow-md">
+                        D
+                    </span>
+                    <p id="tv_option_d_text" class="text-lg sm:text-2xl font-bold text-slate-100 flex-1 leading-snug">
+                        <!-- Teks opsi D -->
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bottom Presenter Control Bar -->
+    <footer class="bg-slate-900/95 border-t border-slate-800 px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Pilihan Kelas & Info -->
+        <div class="flex items-center gap-3">
+            <label class="text-xs font-bold uppercase text-slate-400">Kelas:</label>
+            <select id="tv_select_class" class="text-xs font-bold px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Pilih Kelas...</option>
+            </select>
+        </div>
+
+        <!-- Tombol Navigasi Soal -->
+        <div class="flex items-center gap-3">
+            <button 
+                type="button" 
+                id="btn_prev_question" 
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl border border-slate-700 transition disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+                &larr; Soal Sebelumnya
+            </button>
+
+            <button 
+                type="button" 
+                id="btn_toggle_answer" 
+                class="px-5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-xl transition"
+            >
+                👁️ Tampilkan Kunci Jawaban
+            </button>
+
+            <button 
+                type="button" 
+                id="btn_next_question" 
+                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+                Soal Berikutnya &rarr;
+            </button>
+        </div>
+
+        <!-- Wadah Modul 4 (Scanner Shortcut) -->
+        <div class="flex items-center gap-2">
+            <button 
+                type="button" 
+                id="btn_launch_scanner" 
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5"
+            >
+                📷 Mulai Pindai Kamera (Modul 4)
+            </button>
+        </div>
+
+    </footer>
+
+    <!-- Logic Script -->
+    <script src="/js/tv_quiz.js"></script>
+</body>
+</html>

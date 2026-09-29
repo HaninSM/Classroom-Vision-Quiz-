@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVQ - Input Kelas & Daftar Murid</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="bg-indigo-600 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-bold text-xl backdrop-blur-sm">
+                    👁️
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">Classroom Vision Quiz</h1>
+                    <p class="text-xs text-indigo-100 font-medium">Sistem Ujian Interaktif Computer Vision & QR 4 Sisi</p>
+            </div>
+
+            <!-- Global Module Navigation Links -->
+            <nav class="flex items-center gap-1.5 text-xs font-semibold">
+                <a href="/" class="px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">
+                    🏫 Kelas & Siswa
+                </a>
+                <a href="/print_cards.html" class="px-3 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    🖨️ Cetak Kartu QR
+                </a>
+                <a href="/questions.html" class="px-3 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    📝 Bank Soal
+                </a>
+                <a href="/tv_quiz.html" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-sm transition flex items-center gap-1">
+                    📺 Layar TV Proyektor &rarr;
+                </a>
+                <a href="/dokumentasi.html" class="px-3 py-1.5 rounded-lg bg-white/15 text-white hover:bg-white/25 transition">
+                    📖 Panduan
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Input Form (7 cols) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Buat Kelas & Siswa Baru</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Isi nama kelas dan input daftar nama siswa (Maks. 25 siswa)</p>
+                </div>
+                <span id="student_count_badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    0 / 25 Siswa
+                </span>
+            </div>
+
+            <!-- Form Start -->
+            <form id="class_student_form" onsubmit="return false;" class="space-y-6">
+                
+                <!-- Nama Kelas -->
+                <div>
+                    <label for="class_name_input" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                        Nama Kelas <span class="text-rose-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="class_name_input" 
+                        placeholder="Contoh: Kelas 10 IPA 1, Biologi Peminatan" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-600 transition text-sm text-slate-800 placeholder-slate-400"
+                        required
+                    >
+                </div>
+
+                <!-- Generator Cepat / Kontrol Siswa -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/70 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700">Generator Baris Cepat</span>
+                        <span class="text-xs text-slate-500">Maksimal 25 Siswa</span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <input 
+                            type="number" 
+                            id="quick_amount_input" 
+                            min="1" 
+                            max="25" 
+                            value="5" 
+                            class="w-24 px-3 py-2 rounded-lg border border-slate-300 text-sm text-center font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600"
+                        >
+                        <button 
+                            type="button" 
+                            id="btn_generate_rows" 
+                            class="px-4 py-2 bg-indigo-50 text-indigo-700 font-semibold text-xs rounded-lg hover:bg-indigo-100 transition border border-indigo-200"
+                        >
+                            Set Jumlah Baris
+                        </button>
+                        <button 
+                            type="button" 
+                            id="btn_add_one_row" 
+                            class="px-3 py-2 bg-white text-slate-700 font-semibold text-xs rounded-lg hover:bg-slate-100 transition border border-slate-300"
+                        >
+                            + 1 Siswa
+                        </button>
+                    </div>
+
+                    <!-- Quick Paste Toggle -->
+                    <div class="pt-2 border-t border-slate-200/60">
+                        <button 
+                            type="button" 
+                            id="btn_toggle_paste" 
+                            class="text-xs text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+                        >
+                            📋 Paste Daftar Nama Sekaligus (dari Excel/Word)
+                        </button>
+                        <div id="paste_box_container" class="hidden mt-2 space-y-2">
+                            <textarea 
+                                id="paste_names_textarea" 
+                                rows="4" 
+                                placeholder="Paste nama siswa di sini (satu nama per baris)..." 
+                                class="w-full text-xs p-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            ></textarea>
+                            <div class="flex justify-end gap-2">
+                                <button 
+                                    type="button" 
+                                    id="btn_cancel_paste" 
+                                    class="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-200 rounded"
+                                >
+                                    Batal
+                                </button>
+                                <button 
+                                    type="button" 
+                                    id="btn_apply_paste" 
+                                    class="px-3 py-1.5 text-xs bg-indigo-600 text-white font-medium rounded hover:bg-indigo-700"
+                                >
+                                    Terapkan Nama
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Student Input Rows -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                        Daftar Nama Siswa
+                    </label>
+                    <div id="student_inputs_container" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-2">
+                        <!-- Diisi otomatis oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                    <button 
+                        type="button" 
+                        id="btn_reset_form" 
+                        class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-sm font-semibold transition"
+                    >
+                        Reset
+                    </button>
+                    <button 
+                        type="submit" 
+                        id="btn_submit_class" 
+                        class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-lg shadow-indigo-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                        <span>Simpan Kelas & Daftar Siswa</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column: Results & Active Class Display (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Notification Box -->
+            <div id="status_alert_box" class="hidden p-4 rounded-xl text-sm border flex items-start gap-3">
+                <span id="alert_icon" class="text-lg"></span>
+                <div class="flex-1">
+                    <h4 id="alert_title" class="font-bold text-sm"></h4>
+                    <p id="alert_message" class="text-xs mt-0.5"></p>
+                </div>
+            </div>
+
+            <!-- Result Card (Populated after saving) -->
+            <div id="created_class_result_card" class="hidden bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Tersimpan</span>
+                        <h3 id="result_class_title" class="text-base font-bold text-slate-900 mt-1"></h3>
+                    </div>
+                    <span id="result_class_id" class="text-xs text-slate-400 font-mono"></span>
+                </div>
+
+                <div class="mt-4">
+                    <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
+                        <span>Daftar Siswa & Token QR Unik</span>
+                        <span id="result_student_count"></span>
+                    </div>
+
+                    <div id="result_student_list" class="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                        <!-- Student list with QR token tokens will appear here -->
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 bg-slate-50/80 -mx-6 -mb-6 p-4 rounded-b-2xl space-y-3">
+                    <a 
+                        id="btn_go_to_print_cards" 
+                        href="/print_cards.html" 
+                        target="_blank" 
+                        class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 transition"
+                    >
+                        🖨️ Cetak Lembar Jawaban Siswa (Print Cards) &rarr;
+                    </a>
+                    <p class="text-[11px] text-slate-500 text-center">
+                        Lembar jawaban 4 sisi (A, B, C, D) siap dicetak dalam format A4 untuk pemindaian Computer Vision.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Existing Classes List -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-bold text-slate-900">Daftar Kelas Tersimpan</h3>
+                    <button 
+                        type="button" 
+                        id="btn_refresh_classes" 
+                        class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold"
+                    >
+                        🔄 Refresh
+                    </button>
+                </div>
+                <div id="existing_classes_container" class="space-y-2 max-h-[260px] overflow-y-auto text-xs text-slate-500">
+                    <p class="text-slate-400 italic">Memuat daftar kelas...</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-center text-xs text-slate-500">
+        Classroom Vision Quiz &copy; 2026 &bull; Spec-Driven Development
+    </footer>
+
+    <!-- Custom Frontend Logic -->
+    <script src="/js/class_form.js"></script>
+</body>
+</html>

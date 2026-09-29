@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVQ - Bank Soal Kuis Pilihan Ganda</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-indigo-600 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-bold text-xl backdrop-blur-sm">
+                    👁️
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Classroom Vision Quiz</h1>
+                    <p class="text-xs text-indigo-100 font-medium">Bank Soal Kuis Pilihan Ganda (4 Opsi)</p>
+                </div>
+            </div>
+
+            <!-- Global Module Navigation Links -->
+            <nav class="flex items-center gap-1.5 text-xs font-semibold">
+                <a href="/" class="px-3 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    🏫 Kelas & Siswa
+                </a>
+                <a href="/print_cards.html" class="px-3 py-1.5 rounded-lg text-indigo-100 hover:text-white hover:bg-white/10 transition">
+                    🖨️ Cetak Kartu QR
+                </a>
+                <a href="/questions.html" class="px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">
+                    📝 Bank Soal
+                </a>
+                <a href="/tv_quiz.html" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-sm transition flex items-center gap-1">
+                    📺 Layar TV Proyektor &rarr;
+                </a>
+                <a href="/dokumentasi.html" class="px-3 py-1.5 rounded-lg bg-white/15 text-white hover:bg-white/25 transition">
+                    📖 Panduan
+                </a>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Input Question Form (7 cols) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Buat Soal Kuis Baru</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Input pertanyaan dan 4 opsi pilihan (A, B, C, D)</p>
+                </div>
+                <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    Modul 3: Bank Soal
+                </span>
+            </div>
+
+            <form id="question_form" onsubmit="return false;" class="space-y-5">
+                
+                <!-- Teks Pertanyaan -->
+                <div>
+                    <label for="question_text_input" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                        Teks Pertanyaan / Soal <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea 
+                        id="question_text_input" 
+                        rows="3" 
+                        placeholder="Contoh: Manakah organel sel yang berfungsi sebagai penghasil energi utama (ATP)?"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-600 transition text-sm text-slate-800 placeholder-slate-400"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- 4 Pilihan Opsi -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                        Opsi Jawaban & Kunci Jawaban <span class="text-rose-500">*</span>
+                    </label>
+                    <p class="text-[11px] text-slate-400 -mt-1">Pilih salah satu lingkaran untuk menetapkan kunci jawaban yang benar.</p>
+
+                    <!-- Opsi A -->
+                    <div class="flex items-center gap-3 p-2.5 rounded-xl border border-rose-200 bg-rose-50/40 focus-within:border-rose-500">
+                        <label class="flex items-center gap-2 cursor-pointer shrink-0">
+                            <input type="radio" name="correct_answer_radio" value="A" class="w-4 h-4 text-rose-600 focus:ring-rose-500" checked>
+                            <span class="w-7 h-7 rounded-lg bg-rose-500 text-white font-black text-xs flex items-center justify-center shadow-sm">
+                                A
+                            </span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="option_a_input" 
+                            placeholder="Teks opsi A..." 
+                            class="flex-1 bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+                            required
+                        >
+                    </div>
+
+                    <!-- Opsi B -->
+                    <div class="flex items-center gap-3 p-2.5 rounded-xl border border-blue-200 bg-blue-50/40 focus-within:border-blue-500">
+                        <label class="flex items-center gap-2 cursor-pointer shrink-0">
+                            <input type="radio" name="correct_answer_radio" value="B" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                            <span class="w-7 h-7 rounded-lg bg-blue-500 text-white font-black text-xs flex items-center justify-center shadow-sm">
+                                B
+                            </span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="option_b_input" 
+                            placeholder="Teks opsi B..." 
+                            class="flex-1 bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+                            required
+                        >
+                    </div>
+
+                    <!-- Opsi C -->
+                    <div class="flex items-center gap-3 p-2.5 rounded-xl border border-amber-200 bg-amber-50/40 focus-within:border-amber-500">
+                        <label class="flex items-center gap-2 cursor-pointer shrink-0">
+                            <input type="radio" name="correct_answer_radio" value="C" class="w-4 h-4 text-amber-600 focus:ring-amber-500">
+                            <span class="w-7 h-7 rounded-lg bg-amber-500 text-white font-black text-xs flex items-center justify-center shadow-sm">
+                                C
+                            </span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="option_c_input" 
+                            placeholder="Teks opsi C..." 
+                            class="flex-1 bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+                            required
+                        >
+                    </div>
+
+                    <!-- Opsi D -->
+                    <div class="flex items-center gap-3 p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/40 focus-within:border-emerald-500">
+                        <label class="flex items-center gap-2 cursor-pointer shrink-0">
+                            <input type="radio" name="correct_answer_radio" value="D" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-500 text-white font-black text-xs flex items-center justify-center shadow-sm">
+                                D
+                            </span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="option_d_input" 
+                            placeholder="Teks opsi D..." 
+                            class="flex-1 bg-transparent border-0 focus:ring-0 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                    <button 
+                        type="button" 
+                        id="btn_reset_question_form" 
+                        class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-sm font-semibold transition"
+                    >
+                        Reset
+                    </button>
+                    <button 
+                        type="submit" 
+                        id="btn_save_question" 
+                        class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-lg shadow-indigo-500/25 transition disabled:opacity-50 flex items-center gap-2"
+                    >
+                        <span>Simpan Soal ke Bank</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Right Column: Question List Preview (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Quick Launch to TV Display -->
+            <div class="bg-gradient-to-br from-indigo-700 to-indigo-900 rounded-2xl p-6 text-white shadow-lg shadow-indigo-500/10">
+                <span class="text-[10px] font-black uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">Mode Presentasi</span>
+                <h3 class="text-lg font-black mt-2">Layar Kuis TV / Proyektor</h3>
+                <p class="text-xs text-indigo-100 mt-1 leading-relaxed">
+                    Tampilkan soal pilihan ganda di atas ke layar besar TV kelas dengan tipografi berjarak jauh yang siap dipindai kamera.
+                </p>
+                <a 
+                    href="/tv_quiz.html" 
+                    class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs rounded-xl shadow-md transition"
+                >
+                    📺 Buka Layar Kuis TV Sekarang &rarr;
+                </a>
+            </div>
+
+            <!-- Notification Alert -->
+            <div id="question_status_alert" class="hidden p-4 rounded-xl text-sm border flex items-start gap-3">
+                <span id="question_alert_icon" class="text-lg"></span>
+                <div class="flex-1">
+                    <h4 id="question_alert_title" class="font-bold text-sm"></h4>
+                    <p id="question_alert_message" class="text-xs mt-0.5"></p>
+                </div>
+            </div>
+
+            <!-- Existing Questions List -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Daftar Soal Tersimpan</h3>
+                        <p id="total_questions_counter" class="text-[11px] text-slate-500 mt-0.5">0 Soal tersedia</p>
+                    </div>
+                    <button 
+                        type="button" 
+                        id="btn_refresh_questions" 
+                        class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold"
+                    >
+                        🔄 Refresh
+                    </button>
+                </div>
+
+                <div id="questions_list_container" class="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+                    <!-- Populated by JavaScript -->
+                    <p class="text-xs text-slate-400 italic">Memuat daftar soal...</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto text-center text-xs text-slate-500">
+        Classroom Vision Quiz &copy; 2026 &bull; Modul 3: Bank Soal & Layar TV
+    </footer>
+
+    <!-- Logic Script -->
+    <script src="/js/questions.js"></script>
+</body>
+</html>
