@@ -95,8 +95,9 @@ Setiap kali iterasi modul selesai, checklist berikut wajib dipenuhi dan diperbar
 ### Modul 4: Pemindaian Live Computer Vision & Manajemen Hasil
 - **Status:** Selesai (Verified)
 - **Kebutuhan:**
-  - Streaming kamera web dengan pemilihan hardware (kamera laptop, USB webcam, kamera belakang).
+  - Streaming kamera web dengan pemilihan hardware (prioritas kamera belakang pada mobile `facingMode: environment`).
   - Algoritma pembacaan sudut vektor orientasi $\theta = \text{atan2}(\Delta y, \Delta x) \pmod{360}$.
+  - Dukungan **Mode Koreksi Cermin (Kamera Depan / Selfie)**: Menginversi orientasi sudut horizontal $\theta_{\text{mirror}} = (360^\circ - \theta) \pmod{360}$ sehingga rotasi B dan D tidak tertukar saat guru/penguji menggunakan kamera depan.
   - Deteksi multi-QR paralel hingga 25 kartu secara simultan.
   - Dukungan **Dual Camera Mode**: Webcam bawaan laptop/USB dan **IP Webcam nirkabel via HP Android** (Wi-Fi).
   - Mekanisme **Anti-CORS Stream Proxy** (`/api/exam/proxy-shot`) untuk memutar stream kamera HP tanpa terhalang kebijakan keamanan cross-origin browser.

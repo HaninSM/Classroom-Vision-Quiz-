@@ -114,6 +114,11 @@
                     >
                         Nyalakan Kamera
                     </button>
+                    <!-- Checkbox Mode Cermin Kamera Depan -->
+                    <label class="flex items-center gap-1.5 cursor-pointer bg-slate-800/90 hover:bg-slate-700/80 px-2.5 py-1.5 rounded-lg border border-slate-700 text-slate-200 select-none transition" title="Aktifkan jika menggunakan kamera depan HP (selfie) agar orientasi rotasi B dan D tidak terbalik">
+                        <input type="checkbox" id="mirror_mode_checkbox" class="w-3.5 h-3.5 text-emerald-500 rounded focus:ring-0">
+                        <span class="font-bold text-[11px]">🪞 Kamera Depan (Cermin)</span>
+                    </label>
                     <!-- Tombol Upload Foto untuk Pengujian / Kamera Eksternal -->
                     <button 
                         type="button" 
@@ -155,6 +160,10 @@
                             <option value="proxy_shot">Anti-CORS Proxy (/shot.jpg) - Disarankan</option>
                             <option value="direct_mjpeg">MJPEG Stream Langsung (/video)</option>
                         </select>
+                        <label class="flex items-center gap-1.5 cursor-pointer bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-xl border border-slate-700 text-slate-200 select-none transition" title="Aktifkan jika IP Webcam memakai kamera depan HP agar B dan D tidak terbalik">
+                            <input type="checkbox" id="ip_mirror_mode_checkbox" class="w-3.5 h-3.5 text-indigo-400 rounded focus:ring-0">
+                            <span class="font-bold text-[11px]">🪞 Cermin</span>
+                        </label>
                         <button 
                             type="button" 
                             id="btn_connect_ip_camera" 

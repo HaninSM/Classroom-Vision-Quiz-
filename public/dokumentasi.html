@@ -657,10 +657,25 @@
                 </p>
 
                 <div class="p-4 bg-slate-900 text-emerald-300 font-mono text-xs rounded-2xl overflow-x-auto space-y-1">
-                    <p class="text-slate-400">// Menghitung sudut rotasi dalam derajat [0, 360):</p>
+                    <p class="text-slate-400">// 1. Menghitung sudut rotasi dalam derajat [0, 360):</p>
                     <p>const delta_x = p1.x - p0.x;</p>
                     <p>const delta_y = p1.y - p0.y;</p>
-                    <p>const theta = (Math.atan2(delta_y, delta_x) * 180 / Math.PI + 360) % 360;</p>
+                    <p>let degrees = (Math.atan2(delta_y, delta_x) * 180 / Math.PI + 360) % 360;</p>
+                    <p class="text-slate-400 mt-2">// 2. Koreksi Mode Cermin (Kamera Depan / Selfie HP):</p>
+                    <p class="text-amber-300">if (is_mirror_mode) {</p>
+                    <p class="text-amber-300">&nbsp;&nbsp;&nbsp;&nbsp;degrees = (360 - degrees) % 360; // Menginversi sumbu rotasi horizontal agar B & D tidak tertukar</p>
+                    <p class="text-amber-300">}</p>
+                </div>
+
+                <!-- Penjelasan Ilmiah Efek Cermin Kamera Depan -->
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-xs">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1.5">
+                        <span>🪞</span>
+                        <span>Mengapa Kamera Depan Memerlukan Inversi Sudut?</span>
+                    </h4>
+                    <p class="text-slate-600 leading-relaxed text-[11px]">
+                        Sensor kamera depan (selfie) menghasilkan efek cermin (*horizontal flip*). Akibatnya, rotasi jarum jam ($90^\circ$ / Opsi B) terpantul menjadi berlawanan jarum jam ($270^\circ$ / Opsi D). Sistem CVQ secara cerdas mendeteksi kamera depan dan menginversi rotasi secara matematis $\theta_{\text{koreksi}} = (360^\circ - \theta) \pmod{360}$, sehingga jawaban murid terdeteksi dengan 100% presisi tanpa tertukar.
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-semibold pt-2">

@@ -40,6 +40,22 @@ let is_ip_camera_active = false;
 let ip_stream_img_element = null;
 let ip_polling_timer_id = null;
 
+// Elemen & State Mode Cermin Kamera Depan (Selfie)
+const mirror_mode_checkbox = document.getElementById('mirror_mode_checkbox');
+const ip_mirror_mode_checkbox = document.getElementById('ip_mirror_mode_checkbox');
+let is_mirror_mode = false;
+
+/**
+ * Mengatur status mode cermin (apakah kamera depan atau belakang).
+ * @param {boolean} enabled 
+ */
+function set_mirror_mode(enabled) {
+    is_mirror_mode = Boolean(enabled);
+    if (mirror_mode_checkbox) mirror_mode_checkbox.checked = is_mirror_mode;
+    if (ip_mirror_mode_checkbox) ip_mirror_mode_checkbox.checked = is_mirror_mode;
+    localStorage.setItem('cvq_mirror_mode', is_mirror_mode ? 'true' : 'false');
+}
+
 // Elemen DOM Soal & Hasil
 const active_question_num_badge = document.getElementById('active_question_num_badge');
 const active_question_text_preview = document.getElementById('active_question_text_preview');
@@ -75,6 +91,12 @@ function calculate_qr_orientation_option(corners) {
 
     // Hitung sudut rotasi dalam derajat [0, 360)
     let degrees = (Math.atan2(delta_y, delta_x) * 180 / Math.PI + 360) % 360;
+
+    // Jika mode cermin aktif (kamera depan HP / selfie), orientasi horizontal terbalik secara optik:
+    // Sudut 90 deg (B) terbalik menjadi 270 deg (D), dan sebaliknya.
+    if (is_mirror_mode) {
+        degrees = (360 - degrees) % 360;
+    }
 
     // Toleransi sudut rentang 90 derajat per sisi
     if (degrees >= 315 || degrees < 45) {
@@ -131,6 +153,17 @@ async function enumerate_camera_devices() {
             opt.textContent = device.label || `Kamera ${index + 1}`;
             camera_device_select.appendChild(opt);
         });
+
+        // Sinkronkan nilai pilihan dengan kamera yang sedang streaming aktif
+        if (media_stream) {
+            const active_track = media_stream.getVideoTracks()[0];
+            if (active_track) {
+                const settings = active_track.getSettings();
+                if (settings && settings.deviceId) {
+                    camera_device_select.value = settings.deviceId;
+                }
+            }
+        }
     } catch (error) {
         console.error('[ERROR enumerate_camera_devices]:', error);
     }
@@ -147,17 +180,27 @@ async function start_webcam_stream(device_id = null) {
 
     try {
         let stream = null;
-        // Coba beberapa level konfigurasi untuk mengatasi timeout pada driver EasyCamera
+        // Prioritaskan kamera belakang jika di smartphone dan belum memilih device spesifik
+        const video_constraints = device_id
+            ? { deviceId: { exact: device_id } }
+            : { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } };
+
         try {
             stream = await navigator.mediaDevices.getUserMedia({
-                video: device_id ? { deviceId: { exact: device_id } } : true
+                video: video_constraints
             });
         } catch (e1) {
             console.warn('[Camera try 1 failed]:', e1.message);
-            // Fallback resolusi standar 640x480 (paling kompatibel dengan EasyCamera)
-            stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 640, height: 480 }
-            });
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: device_id ? { deviceId: { exact: device_id } } : true
+                });
+            } catch (e2) {
+                // Fallback resolusi standar 640x480 (paling kompatibel dengan EasyCamera)
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 640, height: 480 }
+                });
+            }
         }
 
         media_stream = stream;
@@ -167,6 +210,21 @@ async function start_webcam_stream(device_id = null) {
             await webcam_video.play();
         } catch (play_err) {
             console.warn('[Video play promise warning]:', play_err);
+        }
+
+        // Deteksi otomatis apakah kamera aktif adalah kamera depan atau belakang
+        const video_track = stream.getVideoTracks()[0];
+        if (video_track) {
+            const track_settings = video_track.getSettings();
+            const track_label = (video_track.label || '').toLowerCase();
+            const is_front = track_settings.facingMode === 'user' || track_label.includes('front') || track_label.includes('depan');
+            const is_back = track_settings.facingMode === 'environment' || track_label.includes('back') || track_label.includes('belakang') || track_label.includes('rear');
+
+            if (is_front) {
+                set_mirror_mode(true);
+            } else if (is_back) {
+                set_mirror_mode(false);
+            }
         }
 
         camera_placeholder.classList.add('hidden');
@@ -682,10 +740,29 @@ btn_toggle_camera.addEventListener('click', () => {
 });
 
 camera_device_select.addEventListener('change', () => {
+    const selected_opt = camera_device_select.options[camera_device_select.selectedIndex];
+    const label = selected_opt ? selected_opt.textContent.toLowerCase() : '';
+    if (label.includes('front') || label.includes('depan') || label.includes('user')) {
+        set_mirror_mode(true);
+    } else if (label.includes('back') || label.includes('belakang') || label.includes('rear') || label.includes('environment')) {
+        set_mirror_mode(false);
+    }
     if (is_scanning) {
         start_webcam_stream(camera_device_select.value);
     }
 });
+
+// Listener interaksi checkbox mode cermin kamera depan
+if (mirror_mode_checkbox) {
+    mirror_mode_checkbox.addEventListener('change', (e) => {
+        set_mirror_mode(e.target.checked);
+    });
+}
+if (ip_mirror_mode_checkbox) {
+    ip_mirror_mode_checkbox.addEventListener('change', (e) => {
+        set_mirror_mode(e.target.checked);
+    });
+}
 
 btn_scanner_next_q.addEventListener('click', () => {
     if (current_question_index < questions_data.length - 1) {
@@ -993,6 +1070,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const saved_ip = localStorage.getItem('cvq_ip_webcam_url');
     if (saved_ip && ip_webcam_url_input) {
         ip_webcam_url_input.value = saved_ip;
+    }
+
+    const saved_mirror = localStorage.getItem('cvq_mirror_mode');
+    if (saved_mirror !== null) {
+        set_mirror_mode(saved_mirror === 'true');
     }
 
     await initialize_vision_engine();
